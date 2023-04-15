@@ -134,6 +134,26 @@ class TestFieldArg(unittest.TestCase):
         self.assertEqual(arg.default_val, '3')
         self.assertEqual(arg.field_name, 'a')
 
+    def test_pythonize(self):
+        arg = cy_to_py.FuncArg('a')
+        arg.cy_type = None
+        arg.py_type = None
+        arg.default_val = None
+        arg.field_name = 'a'
+        self.assertEqual( 'a', arg.pythonize() )
+
+        arg.py_type = 'str'
+        self.assertEqual( 'a : str', arg.pythonize() )
+
+        arg.py_type = None
+        arg.default_val = '\'boh\''
+        self.assertEqual( 'a = \'boh\'', arg.pythonize() )
+
+        arg.py_type = 'str'
+        self.assertEqual( 'a : str = \'boh\'', arg.pythonize() )
+
+
+
 
 
 if __name__ == '__main__':
