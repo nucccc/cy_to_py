@@ -80,15 +80,19 @@ class FuncArg:
     FuncArg shall represent a function argument, which should then be
     pythonized some way
     '''
-    def __init__(self, raw_arg):
+    def __init__(self, raw_arg : str):
         self.cy_type = None
         self.field_name = None
         self.py_type = None
         self.default_val = None
         self.parse_raw_arg(raw_arg = raw_arg)
 
-    def parse_raw_arg(self, raw_arg):
-        #let's do something different instead, start from the back
+    def parse_raw_arg(self, raw_arg : str):
+        '''
+        parse_raw_arg shall take in input the raw string representing the
+        function argument, and then parse it to extrapolate the field name,
+        together with eventual types and default values
+        '''
         last_pos_eval = len(raw_arg)
         pos = last_pos_eval - 1
         while pos >= 0 and (self.default_val is None or self.py_type is None):
@@ -110,7 +114,10 @@ class FuncArg:
         if len(values_list) > 1:
             self.cy_type = ' '.join(values_list[:-1])
     
-    def pythonize(self):
+    def pythonize(self) -> str:
+        '''
+        pythonize returns the corresponding function argument as python code
+        '''
         result = self.field_name
         if self.py_type is not None:
             result += ' : {}'.format(self.py_type)
