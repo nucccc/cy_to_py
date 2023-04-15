@@ -12,9 +12,9 @@ def is_cimport(codeline : str) -> bool:
         return True
     return False
 
-def has_function_call_args(codeline : str) -> bool:
+def has_func_call_args(codeline : str) -> bool:
     '''
-    has_function_call_args returns me if there is a set of arguments,
+    has_func_call_args returns me if there is a set of arguments,
     which is a valid condition for a function
     '''
     open_par_pos = -1
@@ -33,10 +33,12 @@ def has_function_call_args(codeline : str) -> bool:
                 #should return false, since such close parenthesis doesn't
                 #make sense
                 return False
-            elif close_par_pos != -1:
+            elif close_par_pos == -1:
                 close_par_pos = pos
             else:
                 return False
+    if open_par_pos == -1 or close_par_pos == -1:
+        return False
     return True
 
 def is_func_declaration(codeline : str) -> bool:
