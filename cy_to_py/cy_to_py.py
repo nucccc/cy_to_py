@@ -16,7 +16,7 @@ def is_func_declaration(codeline : str):
     '''
     is_func_declaration returns me if a line
     '''
-    if (codeline[:5] == 'cpdef' or codeline[:2] == 'def') and codeline[-1] == ':':
+    if (codeline[:5] == 'cpdef' or codeline[:3] == 'def') and codeline[-1] == ':':
         return True
     return False
 
