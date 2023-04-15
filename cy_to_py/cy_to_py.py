@@ -88,14 +88,6 @@ class FuncArg:
         self.parse_raw_arg(raw_arg = raw_arg)
 
     def parse_raw_arg(self, raw_arg):
-        '''first_char_pos = 0
-        while first_char_pos < len(raw_arg) and raw_arg[first_char_pos] == ' ':
-            first_char_pos += 1
-        next_space_pos = first_char_pos + 1
-        while next_char_pos < len(raw_arg) and raw_arg[first_char_pos] != ' ':
-            next_char_pos += 1
-        first_word = raw_arg[first_char_pos : next_space_pos+1]'''
-
         #let's do something different instead, start from the back
         last_pos_eval = len(raw_arg)
         pos = last_pos_eval - 1
