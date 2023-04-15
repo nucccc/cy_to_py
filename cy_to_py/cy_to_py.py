@@ -2,6 +2,8 @@
 in here there shall be the cython to python execution code
 '''
 
+from .str_helpers import remove_delim_spaces
+
 C_TYPE_KEYWORDS = [
     'int',
     'long',
@@ -103,9 +105,9 @@ class FuncArg:
             if pos >= 0:
                 caught_substring = raw_arg[pos + 1 : last_pos_eval]
                 if raw_arg[pos] == ':':
-                    self.py_type = caught_substring
+                    self.py_type = remove_delim_spaces(caught_substring)
                 if raw_arg[pos] == '=':
-                    self.default_val = caught_substring
+                    self.default_val = remove_delim_spaces(caught_substring)
                 last_pos_eval = pos
                 pos -= 1
         #at this point i sould take stuff from last_pos_eval and evaluate
@@ -115,5 +117,13 @@ class FuncArg:
         self.field_name = values_list[-1]
         if len(values_list) > 1:
             self.cy_type = ' '.join(values_list[:-1])
+    
+    def pythonize(self):
+        result = self.field_name
+        if self.py_type is not None:
+            result += ' : {}'.format(self.py_type)
+        if self.default_val is not None:
+            result += ' = {}'.format(self.default_val)
+        return result
         
 
