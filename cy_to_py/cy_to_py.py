@@ -107,6 +107,7 @@ class FuncArg:
                 if raw_arg[pos] == '=':
                     self.default_val = caught_substring
                 last_pos_eval = pos
+                pos -= 1
         #at this point i sould take stuff from last_pos_eval and evaluate
         #that as a string with field name and eventual cython types
         remaing_substring = raw_arg[:last_pos_eval]

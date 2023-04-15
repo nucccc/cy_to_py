@@ -116,6 +116,24 @@ class TestFieldArg(unittest.TestCase):
         self.assertEqual(arg.default_val, None)
         self.assertEqual(arg.field_name, 'a')
 
+        arg = cy_to_py.FuncArg('int a = 3')
+        self.assertEqual(arg.cy_type, 'int')
+        self.assertEqual(arg.py_type, None)
+        self.assertEqual(arg.default_val, ' 3')
+        self.assertEqual(arg.field_name, 'a')
+
+        arg = cy_to_py.FuncArg('unsigned int a = 3')
+        self.assertEqual(arg.cy_type, 'unsigned int')
+        self.assertEqual(arg.py_type, None)
+        self.assertEqual(arg.default_val, ' 3')
+        self.assertEqual(arg.field_name, 'a')
+
+        arg = cy_to_py.FuncArg('a : int = 3')
+        self.assertEqual(arg.cy_type, None)
+        self.assertEqual(arg.py_type, ' int ')
+        self.assertEqual(arg.default_val, ' 3')
+        self.assertEqual(arg.field_name, 'a')
+
 
 
 if __name__ == '__main__':
