@@ -2,6 +2,14 @@
 in here there shall be the cython to python execution code
 '''
 
+C_TYPE_KEYWORDS = [
+    'int',
+    'long',
+    'float',
+    'double',
+    'char'
+]
+
 def is_cimport(codeline : str) -> bool:
     '''
     is_cimport returns me if a codeline is a cimport
@@ -64,3 +72,47 @@ def ctp_line(codeline : str) -> str:
     ctp_line takes in input a code line and converts it back to python from cython
     '''
     pass
+
+class FuncArg:
+    '''
+    FuncArg shall represent a function argument, which should then be
+    pythonized some way
+    '''
+    def __init__(self, raw_arg):
+        self.cy_type = None
+        self.field_name = None
+        self.py_type = None
+        self.default_val = None
+        self.parse_raw_arg(raw_arg = raw_arg)
+
+    def parse_raw_arg(self, raw_arg):
+        '''first_char_pos = 0
+        while first_char_pos < len(raw_arg) and raw_arg[first_char_pos] == ' ':
+            first_char_pos += 1
+        next_space_pos = first_char_pos + 1
+        while next_char_pos < len(raw_arg) and raw_arg[first_char_pos] != ' ':
+            next_char_pos += 1
+        first_word = raw_arg[first_char_pos : next_space_pos+1]'''
+
+        #let's do something different instead, start from the back
+        last_pos_eval = len(raw_arg)
+        pos = last_pos_eval - 1
+        while pos >= 0 and (self.default_val is None or self.py_type is None):
+            while pos >= 0 and raw_arg[pos] not in {':', '='}:
+                pos -= 1
+            if pos >= 0:
+                caught_substring = raw_arg[pos + 1 : last_pos_eval]
+                if raw_arg[pos] == ':':
+                    self.py_type = caught_substring
+                if raw_arg[pos] == '=':
+                    self.default_val = caught_substring
+                last_pos_eval = pos
+        #at this point i sould take stuff from last_pos_eval and evaluate
+        #that as a string with field name and eventual cython types
+        remaing_substring = raw_arg[:last_pos_eval]
+        values_list = [elem for elem in remaing_substring.split(' ') if elem]
+        self.field_name = values_list[-1]
+        if len(values_list) > 1:
+            self.cy_type = ' '.join(values_list[:-1])
+        
+

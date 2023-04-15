@@ -101,6 +101,21 @@ class TestHasFuncCallArgs(TestBoolFunc):
         self.attach_data(test_data=test_data)
         self.run_bool_test()
 
+class TestFieldArg(unittest.TestCase):
+
+    def test_parse_field_arg(self):
+        arg = cy_to_py.FuncArg('a')
+        self.assertEqual(arg.cy_type, None)
+        self.assertEqual(arg.py_type, None)
+        self.assertEqual(arg.default_val, None)
+        self.assertEqual(arg.field_name, 'a')
+
+        arg = cy_to_py.FuncArg('int a')
+        self.assertEqual(arg.cy_type, 'int')
+        self.assertEqual(arg.py_type, None)
+        self.assertEqual(arg.default_val, None)
+        self.assertEqual(arg.field_name, 'a')
+
 
 
 if __name__ == '__main__':
