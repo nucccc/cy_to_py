@@ -101,6 +101,26 @@ class TestHasFuncCallArgs(TestBoolFunc):
         self.attach_data(test_data=test_data)
         self.run_bool_test()
 
+class TestIsVarDefs(TestBoolFunc):
+
+    def test_is_var_def(self):
+        test_data = BoolFuncTestData(
+            func_to_test = cy_to_py.is_var_def,
+            true_cases = [
+                'cdef int a',
+                'cdef long a',
+                'cdef short a = 7'
+            ],
+            false_cases = [
+                'def funzioneACaso():',
+                'a = 0',
+                'cdef void funcInvocableInCEnv():',
+                'cdef int funcInvocableInCEnvWithVar():'
+            ]
+        )
+        self.attach_data(test_data=test_data)
+        self.run_bool_test()
+
 class TestFieldArg(unittest.TestCase):
 
     def test_parse_field_arg(self):
