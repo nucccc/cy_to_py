@@ -4,6 +4,8 @@ in here there shall be the cython to python execution code
 
 from .str_helpers import remove_delim_spaces
 
+import keyws
+
 C_TYPE_KEYWORDS = [
     'int',
     'long',
@@ -75,6 +77,22 @@ def ctp_line(codeline : str) -> str:
     '''
     pass
 
+#before everything i would just need something that checks me if an instruction
+#is a variable defintion
+def is_var_def(cmd : str) -> bool:
+    '''
+    is_var_def shall verify if a command is variable declaration
+    '''
+    cmd_defs = cmd.split(',')
+    def_start = cmd_defs[0]
+    def_elems = def_start.split(' ')
+    if def_elems[0] != keyws.CY_VAR_DEF:
+        return False
+    for elem in def_elems[1:]:
+        if elem in keyws.C_TYPES:
+            return True
+    return False
+
 class FuncArg:
     '''
     FuncArg shall represent a function argument, which should then be
@@ -125,4 +143,4 @@ class FuncArg:
             result += ' = {}'.format(self.default_val)
         return result
         
-
+#now there are certain call that require some more lines eventually
