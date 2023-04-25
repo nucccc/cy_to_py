@@ -2,6 +2,8 @@
 in here somehow keywords shall be called and instantiated
 '''
 
+MULTI_LINE_DELIM = '\'\'\''
+
 CONTROL_KEYWS = {
     'for',
     'while',

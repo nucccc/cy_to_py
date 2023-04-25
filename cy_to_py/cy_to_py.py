@@ -4,7 +4,9 @@ in here there shall be the cython to python execution code
 
 from .str_helpers import remove_delim_spaces
 
-import keyws
+from .keyws import *
+
+from typing import List
 
 C_TYPE_KEYWORDS = [
     'int',
@@ -13,6 +15,10 @@ C_TYPE_KEYWORDS = [
     'double',
     'char'
 ]
+
+SEPS = {
+    ' '
+}
 
 def is_cimport(codeline : str) -> bool:
     '''
@@ -86,10 +92,10 @@ def is_var_def(cmd : str) -> bool:
     cmd_defs = cmd.split(',')
     def_start = cmd_defs[0]
     def_elems = def_start.split(' ')
-    if def_elems[0] != keyws.CY_VAR_DEF:
+    if def_elems[0] != CY_VAR_DEF:
         return False
     for elem in def_elems[1:]:
-        if elem in keyws.C_TYPES:
+        if elem in C_TYPES:
             return True
     return False
 
@@ -142,5 +148,61 @@ class FuncArg:
         if self.default_val is not None:
             result += ' = {}'.format(self.default_val)
         return result
+    
+def comment_present(cmd : str) -> int:
+    '''
+    comment_present is going to tell if a comment is present at a certain line
+    '''
         
-#now there are certain call that require some more lines eventually
+#now there are certain calls that require some more lines eventually
+def continues_in_next_line(cmd : str) -> bool:
+    '''
+    continues_in_next_line
+    '''
+
+def makes_sense_as_syntactical_word(word : str) -> bool:
+    '''
+    makes_sense_as_syntactical_word shall return if stuff extrapolated from
+    sep_syntactical_words
+    '''
+    print('invoked')
+    #well if the length of a string is 0 then i shall return false
+    if len(word) == 0:
+        return False
+    #then i check if there only spaces
+    all_spaces = True
+    for char in word:
+        if char != ' ':
+            all_spaces = False
+            break
+    if all_spaces:
+        return False
+    #if i passed all checks i return false
+    return True
+
+def sep_syntactical_words(cmd : str) -> List[str]:
+    '''
+    sep_syntactical_words shall in some still unknown way take a command and
+    return its parts
+
+    also it separates a comment nobody knows why
+    '''
+    elems = list()
+    first_char = 0
+    special_context = False
+    for i, char in enumerate(cmd):
+        if not special_context:
+            if char in SEPS:
+                if makes_sense_as_syntactical_word( cmd[first_char:i] ):
+                    print( cmd[first_char:i] )
+                    elems.append( cmd[first_char:i] )
+                first_char = i + 1
+        if char == '#':
+            if makes_sense_as_syntactical_word( cmd[first_char:i] ):
+                print( cmd[first_char:i] )
+                elems.append( cmd[first_char:i] )
+            elems.append(cmd[i:])
+            return elems
+    if makes_sense_as_syntactical_word( cmd[first_char:] ):
+        elems.append( cmd[first_char:] )
+    return elems
