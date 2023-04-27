@@ -4,6 +4,10 @@ in here somehow keywords shall be called and instantiated
 
 MULTI_LINE_DELIM = '\'\'\''
 
+CIMPORT = 'cimport'
+
+IMPORT = 'import'
+
 CONTROL_KEYWS = {
     'for',
     'while',

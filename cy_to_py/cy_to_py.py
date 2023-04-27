@@ -17,7 +17,8 @@ C_TYPE_KEYWORDS = [
 ]
 
 SEPS = {
-    ' '
+    ' ',
+    ''
 }
 
 def is_cimport(codeline : str) -> bool:
@@ -206,3 +207,44 @@ def sep_syntactical_words(cmd : str) -> List[str]:
     if makes_sense_as_syntactical_word( cmd[first_char:] ):
         elems.append( cmd[first_char:] )
     return elems
+
+def sep_commands(code : str) -> List[str]:
+    '''
+    okay i don't know where this is going but i guess i'll write some stuff
+
+    here i would like something that separates various portions of code into
+    commands, don't know how don't know why
+    '''
+    cmds = list()
+    expected_break = '\n'
+    first_keyw = None
+    start = 0
+    evaluating_cdef_doubt = False
+
+    #i shall loop through all my characters
+    for i, char in enumerate(code):
+        if char == expected_break:
+            start = i + 1
+            cmds.append( code[start:i] )
+            expected_break = '\n'
+            first_keyw = None
+            evaluating_cdef_doubt = False
+        elif first_keyw is None and char in SEPS:
+            first_keyw = code[start:i]
+            #eventually depending on the first keyword i shall modify the expected break
+            if first_keyw in CONTROL_KEYWS + FUNC_DEF_STARTS and first_keyw != CY_VAR_DEF:
+                expected_break = ':'
+            elif first_keyw == CY_VAR_DEF:
+                #well in this case i shall see from other keywords which one shall be the ending point
+                evaluating_cdef_doubt = True
+                #i will then check whether or not there is a character defined as
+                #something that just allows to say that this will be a function
+                #or a variable declaration
+        elif evaluating_cdef_doubt:
+            if char in {',', '='}:
+                evaluating_cdef_doubt = False
+            elif char == '(':
+                evaluating_cdef_doubt = False
+                expected_break = ':'        
+    
+    return cmds
