@@ -306,6 +306,29 @@ class ReadingContextComment(ReadingContext):
 
     def isNaturalLanguage(self) -> bool:
         return True
+    
+class ReadingContextTabExp(ReadingContext):
+    '''
+    this should be expressions which terminate in a ':' character, usually
+    imposing a subsequent tab
+    '''
+
+    def contextEnd(self, s: str, i: int) -> bool:
+        return s[i] == ':'
+
+    def isNaturalLanguage(self) -> bool:
+        return False
+
+class ReadingContextExp(ReadingContext):
+    '''
+    this should be normal expressions
+    '''
+
+    def contextEnd(self, s: str, i: int) -> bool:
+        return s[i] == '\n'
+
+    def isNaturalLanguage(self) -> bool:
+        return False
 
 STR_SEPS = [
     '\'',
