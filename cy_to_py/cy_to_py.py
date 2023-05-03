@@ -296,6 +296,17 @@ class ReadingContextStr(ReadingContext):
     def isNaturalLanguage(self) -> bool:
         return True
 
+class ReadingContextComment(ReadingContext):
+    '''
+    this shall be a multi line stuff
+    '''
+
+    def contextEnd(self, s: str, i: int) -> bool:
+        return s[i] == '\n'
+
+    def isNaturalLanguage(self) -> bool:
+        return True
+
 STR_SEPS = [
     '\'',
     '"'
