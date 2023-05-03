@@ -6,6 +6,8 @@ from .str_helpers import remove_delim_spaces
 
 from .keyws import *
 
+from abc import ABC, abstractmethod
+
 from typing import List
 
 C_TYPE_KEYWORDS = [
@@ -248,3 +250,66 @@ def sep_commands(code : str) -> List[str]:
                 expected_break = ':'        
     
     return cmds
+
+class ReadingContext(ABC):
+    '''
+    okay maybe i need a reading context, maybe i will stack them in order to know
+    in which condition i am
+    '''
+    
+    @abstractmethod
+    def contextEnd(self, s : str, i : int) -> bool:
+        '''
+        contextEnd shall tell me if the context ends with character at pos i of string s
+        '''
+        pass
+
+    @abstractmethod
+    def isNaturalLanguage(self) -> bool:
+        pass
+
+class ReadingContextStr(ReadingContext):
+    '''
+    this shall be a multi line stuff
+    '''
+    _quote_mark : str = '\''
+
+    def __init__(self, quote_mark : None | str):
+        if quote_mark is not None:
+            self._quote_mark = quote_mark
+
+    def getQuoteMark(self) -> str:
+        return self._quote_mark
+
+    def contextEnd(self, s: str, i: int) -> bool:
+        quote_mark = self.getQuoteMark()
+        qm_len = len(quote_mark)
+        if i < 2:
+            return False
+        if s[i-qm_len+1:i+1] == self.getQuoteMark():
+            if i > 2:
+                if s[i-qm_len] == '\\':
+                    return False
+            else:
+                return True
+        return False
+
+    def isNaturalLanguage(self) -> bool:
+        return True
+
+STR_SEPS = [
+    '\'',
+    '"'
+]
+
+def multilineReadingContext(s : str, i : int) -> bool:
+    '''
+    this shall tell me if the following reading context is a multiline one,
+    which is the case when 3 consecutive such chars happen to be in there
+    '''
+    quote_char = s[i]
+    if i + 2 >= len(s):
+        return False
+    if s[i+1] == s[i+2] == quote_char:
+        return True
+    return False
