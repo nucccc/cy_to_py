@@ -172,7 +172,17 @@ class TestFieldArg(unittest.TestCase):
         arg.py_type = 'str'
         self.assertEqual( 'a : str = \'boh\'', arg.pythonize() )
 
+class TestMultilineReadingContext(unittest.TestCase):
 
+    def testContextEnd(self):
+        rc = cy_to_py.ReadingContextStr('\'')
+        self.assertTrue( rc.contextEnd( '\'\'\'abc\'\'\'', 6 ) )
+        self.assertFalse( rc.contextEnd( '\'\'\'ab\\\'\'\'', 6 ) )
+
+        rc = cy_to_py.ReadingContextStr('\'\'\'')
+        self.assertTrue( rc.contextEnd( '\'\'\'abc\'\'\'', 8 ) )
+        self.assertFalse( rc.contextEnd( '\'\'\'abc\'\'\'', 7 ) )
+        self.assertFalse( rc.contextEnd( '\'\'\'ab\\\'\'\'', 8 ) )
 
 
 

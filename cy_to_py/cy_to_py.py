@@ -287,8 +287,7 @@ class ReadingContextStr(ReadingContext):
         if i < 2:
             return False
         if s[i-qm_len+1:i+1] == self.getQuoteMark():
-            if i > 2:
-                if s[i-qm_len] == '\\':
+            if i > qm_len - 1 and s[i-qm_len] == '\\':
                     return False
             else:
                 return True
